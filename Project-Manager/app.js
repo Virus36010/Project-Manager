@@ -67,8 +67,9 @@ app.post("/find",urlParser,(req,res)=>{
 
   let id = req.body
   let projects = JSON.parse(fs.readFileSync("projects.json"))
-  projects = projects.filter(item => item.id = id)
-  
+  projects = projects.filter(item => item.id == id)
+
+  res.send(projects)
 })
 
 app.get("/projects",(req,res)=>{
