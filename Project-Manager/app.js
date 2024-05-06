@@ -5,6 +5,8 @@ const app = express()
 const PORT = 3000
 const urlParser = express.urlencoded({extended:false})
 
+let LocalUSER = {}
+
 app.use(express.static("public"))
 
 app.listen(PORT, ()=>{
@@ -54,6 +56,12 @@ app.post("/reg",urlParser,(req,res)=>{
 
   res.redirect(req.get('referer'));
   setUsers(tempUser)
+
+  LocalUSER = tempUser
+  console.log(LocalUSER)
+  app.get("/user",(req,res)=>{
+    res.send(JSON.parse(tempUser))
+  })
 })
 
 let setUsers = (user) => {
