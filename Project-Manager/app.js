@@ -5,8 +5,6 @@ const app = express()
 const PORT = 3000
 const urlParser = express.urlencoded({extended:false})
 
-let LocalUSER = {}
-
 app.use(express.static("public"))
 
 app.listen(PORT, ()=>{
@@ -39,6 +37,7 @@ let setProjects = (user) => {
   fs.writeFileSync("projects.json", JSON.stringify(data));
 }
 
+let user
 app.post("/reg",urlParser,(req,res)=>{
   if(!req.body) return res.sendStatus(400);
   console.log("Was added user!")
@@ -58,9 +57,10 @@ app.post("/reg",urlParser,(req,res)=>{
   setUsers(tempUser)
 
   console.log(tempUser)
-  app.get("/user",(req,res)=>{
-    res.send(JSON.parse(tempUser))
-  })
+  user = tempUser
+})
+app.get("/user",(req,res)=>{
+  res.send(user)
 })
 
 let setUsers = (user) => {
@@ -70,15 +70,16 @@ let setUsers = (user) => {
 }
 
 let OBJproject
-app.post("/find",urlParser,(req,res)=>{
+app.get("/find",(req,res)=>{
   if(!req.body) return res.sendStatus(400);
 
   let id = req.body.id
   let projects = JSON.parse(fs.readFileSync("projects.json"))
   projects = projects.filter((item) => item.id == id)
   OBJproject = projects[0]
-  res.redirect("http://localhost:3000/project");
+  //res.redirect("http://localhost:3000/project");
   //res.redirect(req.get('referer'));
+  res.send(OBJproject)
 })
 app.get("/OBJproject",(req,res)=>{
   res.send(OBJproject)
